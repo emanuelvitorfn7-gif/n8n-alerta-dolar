@@ -1,40 +1,40 @@
-# 💵 Alerta de Cotação do Dólar com n8n
+# 💵 USD Exchange Rate Alert with n8n
 
-Automação desenvolvida em **n8n** para consultar automaticamente a cotação atual do dólar em relação ao real, analisar o valor e executar diferentes ações de acordo com a cotação encontrada.
+Automation developed with **n8n** to automatically check the current US dollar exchange rate against the Brazilian real, analyze the value, and perform different actions based on the detected exchange rate.
 
-O projeto utiliza uma API pública de câmbio, Google Sheets e Gmail.
+The project uses a public exchange rate API, Google Sheets, and Gmail.
 
 ---
 
-## 🚀 O que essa automação faz?
+## 🚀 What does this automation do?
 
-O fluxo funciona da seguinte maneira:
+The workflow works as follows:
 
-1. Recebe uma requisição através de um Webhook.
-2. Consulta a cotação atual do dólar.
-3. Converte o valor retornado pela API.
-4. Analisa a cotação utilizando um Switch.
-5. Dependendo do valor:
-   - registra a cotação em uma planilha;
-   - ou envia um alerta por e-mail.
+1. Receives a request through a Webhook.
+2. Retrieves the current USD exchange rate.
+3. Converts the value returned by the API.
+4. Analyzes the exchange rate using a Switch node.
+5. Depending on the value:
+   - records the exchange rate in a spreadsheet;
+   - or sends an email alert.
 
-Fluxo resumido:
+Workflow overview:
 
 Webhook  
 ↓  
 HTTP Request  
 ↓  
-Cotação USD/BRL  
+USD/BRL Exchange Rate  
 ↓  
-Conversão do valor  
+Value Conversion  
 ↓  
 Switch  
-├── Cotação alta → Google Sheets  
-└── Cotação baixa → Gmail  
+├── High exchange rate → Google Sheets  
+└── Low exchange rate → Gmail  
 
 ---
 
-## 🛠 Tecnologias utilizadas
+## 🛠 Technologies Used
 
 - n8n
 - REST API
@@ -49,346 +49,265 @@ Switch
 
 ---
 
-## 📊 API utilizada
+## 📊 API Used
 
-A automação utiliza a **AwesomeAPI** para consultar a cotação USD/BRL.
+The automation uses **AwesomeAPI** to retrieve the USD/BRL exchange rate.
 
 Endpoint:
 
 https://economia.awesomeapi.com.br/json/last/USD-BRL
 
-A API retorna os dados atuais da cotação do dólar.
+The API returns the current US dollar exchange rate data.
 
-O workflow utiliza o campo `bid` retornado pela API e transforma o valor em um número que pode ser analisado pelo n8n.
+The workflow uses the `bid` field returned by the API and converts it into a numeric value that can be analyzed by n8n.
 
 ---
 
-## 🧠 Regras da automação
+## 🧠 Automation Rules
 
-Depois de consultar a API, o workflow cria o campo:
+After retrieving the data from the API, the workflow creates the field:
 
 `valor_convertido`
 
-Esse valor é enviado para um node **Switch**.
+This value is sent to a **Switch** node.
 
-Atualmente foram configuradas duas regras.
+Currently, two rules are configured.
 
-### 🔴 Cotação acima de R$ 5,30
+### 🔴 Exchange rate above R$ 5.30
 
-Condição:
+Condition:
 
 `valor_convertido > 5.30`
 
-A cotação é direcionada para o fluxo identificado como:
+The exchange rate is sent to the workflow path identified as:
 
 `nao comprar`
 
-Nesse caminho, o valor é registrado no Google Sheets.
+In this path, the value is recorded in Google Sheets.
 
-### 🟢 Cotação menor ou igual a R$ 5,22
+### 🟢 Exchange rate lower than or equal to R$ 5.22
 
-Condição:
+Condition:
 
 `valor_convertido <= 5.22`
 
-A cotação é direcionada para:
+The exchange rate is sent to:
 
 `comprar muito`
 
-Nesse caso, o usuário recebe um alerta por e-mail informando que o dólar está em baixa.
+In this case, the user receives an email alert informing them that the US dollar exchange rate is low.
 
 ---
 
-## 📁 Estrutura do projeto
+## 📁 Project Structure
 
 n8n-alerta-dolar/  
 ├── alerta-dolar.json  
 └── README.md  
 
-O arquivo principal do projeto é:
+The main project file is:
 
 `alerta-dolar.json`
 
-Ele contém toda a estrutura do workflow do n8n.
+It contains the entire n8n workflow structure.
 
 ---
 
-## 📥 Como instalar
+## 📥 How to Install
 
-### 1. Baixe o projeto
+### 1. Download the Project
 
-Você pode baixar pelo GitHub utilizando:
+You can download the project from GitHub using:
 
 `Code → Download ZIP`
 
-Ou pelo Git:
+Or clone it using Git:
 
 `git clone https://github.com/emanuelvitorfn7-gif/n8n-alerta-dolar.git`
 
-Depois entre na pasta:
+Then enter the project folder:
 
 `cd n8n-alerta-dolar`
 
 ---
 
-## 2. Abra o n8n
+## 2. Open n8n
 
-Você precisa ter uma instalação do n8n.
+You need to have an n8n installation available.
 
-Em uma instalação local, normalmente o n8n pode ser acessado através de:
+For a local installation, n8n can usually be accessed at:
 
 `http://localhost:5678`
 
-Também é possível utilizar o n8n Cloud.
+You can also use n8n Cloud.
 
 ---
 
-## 3. Importe o workflow
+## 3. Import the Workflow
 
-Dentro do n8n:
+Inside n8n:
 
-1. Abra a área de workflows.
-2. Clique no menu do workflow.
-3. Escolha a opção de importar arquivo.
-4. Selecione:
+1. Open the workflows section.
+2. Click the workflow menu.
+3. Select the option to import a file.
+4. Choose:
 
 `alerta-dolar.json`
 
-O workflow será carregado no seu n8n.
+The workflow will be loaded into your n8n instance.
 
 ---
 
-## 🔑 Configure suas credenciais
+## 🔑 Configure Your Credentials
 
-As credenciais pessoais não devem ser compartilhadas pelo GitHub.
+Personal credentials should never be shared through GitHub.
 
-Por isso, quem importar o projeto deverá configurar suas próprias contas.
+Anyone who imports this project must configure their own accounts.
 
 ---
 
 ## 📈 Google Sheets
 
-Abra o node:
+Open the node:
 
 `salva a cotaçao na planilha`
 
-Conecte sua conta Google e escolha sua própria planilha.
+Connect your Google account and select your own spreadsheet.
 
-A planilha pode possuir duas colunas:
+The spreadsheet can contain two columns:
 
-| data | cotaçao |
-|------|---------|
+| date | exchange_rate |
+|------|---------------|
 | 2026/10/04 18:30 | 5.21 |
 
-Depois selecione a planilha e a aba desejada dentro do node do Google Sheets.
+Then select the desired spreadsheet and sheet inside the Google Sheets node.
 
 ---
 
 ## 📧 Gmail
 
-Abra o node:
+Open the node:
 
 `Send an Email`
 
-Conecte sua própria conta Gmail.
+Connect your own Gmail account.
 
-Depois configure o endereço que receberá os alertas.
+Then configure the email address that will receive the alerts.
 
-Você também pode personalizar:
+You can also customize:
 
-- destinatário;
-- assunto;
-- conteúdo;
-- mensagem do alerta.
+- recipient;
+- subject;
+- content;
+- alert message.
 
-Exemplo de mensagem:
+Example message:
 
-**Assunto:** Cotação do dólar
+**Subject:** USD Exchange Rate
 
-**Mensagem:**
+**Message:**
 
-O dólar está em baixa.
+The US dollar exchange rate is low.
 
-Cotação atual: R$ 5.21
+Current exchange rate: R$ 5.21
 
 ---
 
 ## 🌐 Webhook
 
-O workflow começa através de um Webhook.
+The workflow starts through a Webhook.
 
-Método:
+Method:
 
 `POST`
 
-Caminho configurado:
+Configured path:
 
 `nova_transaçao`
 
-Depois de ativar o workflow, o n8n disponibilizará uma URL de produção.
+After activating the workflow, n8n will provide a production URL.
 
-Em uma instalação local, ela pode ser semelhante a:
+In a local installation, it may look similar to:
 
 `http://localhost:5678/webhook/nova_transaçao`
 
-Você pode enviar uma requisição POST para iniciar o fluxo.
+You can send a POST request to start the workflow.
 
-Exemplo no PowerShell:
+PowerShell example:
 
 `Invoke-WebRequest -Method POST -Uri "http://localhost:5678/webhook/nova_transaçao"`
 
-Também é possível utilizar:
+You can also use:
 
 - Postman
 - Insomnia
 - curl
-- outro sistema
-- outra automação
+- another system
+- another automation
 
 ---
 
-## ▶️ Como executar
+## ▶️ How to Run
 
-Depois de configurar Gmail e Google Sheets:
+After configuring Gmail and Google Sheets:
 
-1. Importe o workflow.
-2. Configure suas credenciais.
-3. Escolha sua própria planilha.
-4. Configure o e-mail de destino.
-5. Ative o workflow.
-6. Copie a URL de produção do Webhook.
-7. Envie uma requisição POST.
-8. O n8n consultará a cotação atual.
-9. O valor será analisado.
-10. O fluxo executará a ação correspondente.
+1. Import the workflow.
+2. Configure your credentials.
+3. Select your own spreadsheet.
+4. Configure the destination email address.
+5. Activate the workflow.
+6. Copy the production Webhook URL.
+7. Send a POST request.
+8. n8n will retrieve the current exchange rate.
+9. The value will be analyzed.
+10. The workflow will execute the corresponding action.
 
-Fluxo esperado:
+Expected workflow:
 
 Webhook  
 ↓  
 HTTP Request  
 ↓  
-Conversão Dolar X Real  
+USD to BRL Conversion  
 ↓  
 Switch  
 ↓  
-Decisão  
+Decision  
 ├── Google Sheets  
 └── Gmail  
 
 ---
 
-## 🔧 Personalizando os valores
+## 🔧 Customizing the Values
 
-Você pode alterar os valores usados para decidir quando uma ação será executada.
+You can change the values used to determine when each action should be executed.
 
-Abra o node:
+Open the node:
 
 `cotaçao do dolar`
 
-Depois altere as condições.
+Then change the conditions.
 
-Por exemplo:
+For example:
 
-Comprar:
+Buy:
 
 `<= 5.00`
 
-Não comprar:
+Do not buy:
 
 `> 5.50`
 
-Assim, cada pessoa pode adaptar a automação conforme o objetivo do projeto.
+This allows each user to customize the automation according to their own project goals.
 
 ---
 
-## 🔄 Outras moedas
+## 🔄 Other Currencies
 
-O projeto também pode ser adaptado para consultar outros pares de moedas.
+The project can also be adapted to retrieve other currency pairs.
 
-Exemplos:
+Examples:
 
 - EUR-BRL
 - BTC-BRL
-- USD-BRL
-
-Para isso, é necessário alterar o endpoint da API e ajustar os campos utilizados no workflow.
-
----
-
-## ⚠️ Aviso
-
-Este projeto possui finalidade:
-
-- educacional;
-- demonstrativa;
-- estudo de automação;
-- integração de APIs;
-- aprendizado de n8n.
-
-As mensagens como `comprar` ou `não comprar` fazem parte da lógica demonstrativa da automação e não representam recomendação financeira.
-
----
-
-## 🔐 Segurança
-
-Nunca publique no GitHub:
-
-- senhas;
-- tokens;
-- API Keys;
-- credenciais OAuth;
-- arquivos `.env`;
-- credenciais pessoais.
-
-Cada pessoa que baixar este projeto deve configurar suas próprias credenciais diretamente no n8n.
-
----
-
-## 💡 Melhorias futuras
-
-Algumas melhorias que podem ser adicionadas:
-
-- Schedule Trigger para execução automática;
-- alertas pelo Telegram;
-- alertas pelo WhatsApp;
-- histórico completo da cotação;
-- banco de dados;
-- dashboard;
-- gráficos de variação;
-- múltiplos níveis de alerta;
-- suporte a diferentes moedas;
-- tratamento de erros;
-- logs de execução.
-
----
-
-## 👨‍💻 Autor
-
-**Emanuel Vítor Fernandes Nascimento**
-
-Desenvolvimento Back-end e Automação
-
-GitHub:
-
-https://github.com/emanuelvitorfn7-gif
-
----
-
-## ⭐ Sobre o projeto
-
-Este projeto foi desenvolvido para praticar conceitos importantes de automação e desenvolvimento, incluindo:
-
-- consumo de APIs REST;
-- requisições HTTP;
-- manipulação de JSON;
-- lógica condicional;
-- integração entre serviços;
-- Webhooks;
-- automação de e-mails;
-- Google Sheets;
-- Git;
-- GitHub;
-- n8n.
-
-Se este projeto foi útil para seus estudos, considere deixar uma ⭐ no repositório.
+- USD-B
